@@ -5,6 +5,8 @@ const passport = require('passport');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const validateProfileInput = require('../../validation/profile');
+const validateBucketListActivitiesInput = require('../../validation/bucketListActivities');
+const validateBucketListPlaceToVisitInput = require('../../validation/bucketListPlaceToVisit');
 
 // @route   GET api/profile
 // @desc    Current user's profile
@@ -27,6 +29,69 @@ router.get(
         res.json(profile);
       })
       .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   GET api/profile/username/:username
+// @desc    Get profile by username
+// @access  Public
+router.get('/username/:username', (req, res) => {
+    const errors = {};
+
+    Profile.findOne({ username: req.params.username })
+      .populate('user', ['name', 'avatar'])
+      .then(profile => {
+        if (!profile) {
+          errors.noprofile = 'No profile found';
+
+          return res.status(404).json(errors);
+        }
+
+        res.json(profile);
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   GET api/profile/user/:user_id
+// @desc    Get profile by id
+// @access  Public
+router.get('/user/:user_id', (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.params.user_id })
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = 'No profile found';
+
+        return res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch(err => res.status(404).json({profile: 'No profile for this user'}));
+  }
+);
+
+// @route   GET api/profile/all
+// @desc    Get all profiles
+// @access  Public
+router.get('/all', (req, res) => {
+  const errors = {};
+
+  Profile.find()
+    .populate('user', ['name', 'avatar'])
+    .then(profiles => {
+      if (!profiles) {
+        errors.noprofiles = 'No profiles found';
+
+        return res.status(404).json(errors);
+      }
+
+      res.json(profiles);
+    })
+    .catch(err => res.status(404).json({profiles: 'No profile for this user'}));
   }
 );
 
@@ -86,6 +151,66 @@ router.post(
             })
         }
       });
+  }
+);
+
+// @route   POST api/profile/bucket_list_activities
+// @desc    Add bucket list activities to profile
+// @access  Private
+router.post(
+  '/bucket_list_activities', 
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateBucketListActivitiesInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        const newBucketListActivities = {
+          activity: req.body.activity,
+          activity_location: req.body.activity_location,
+          expected_month_visit: req.body.expected_month_visit,
+          description: req.body.description,
+        }
+
+        profile.bucket_list_activities.unshift(newBucketListActivities);
+
+        profile.save()
+          .then(profile => res.json(profile));
+      })
+  }
+);
+
+// @route   POST api/profile/bucket_list_places_to_visit
+// @desc    Add bucket list places to visit 
+// @access  Private
+router.post(
+  '/bucket_list_places_to_visit', 
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateBucketListPlaceToVisitInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        const newBucketListPlaceToVisit = {
+          place_to_visit: req.body.place_to_visit,
+          place_to_visit_location: req.body.place_to_visit_location,
+          expected_month_visit: req.body.expected_month_visit,
+          description: req.body.description,
+        }
+
+        profile.bucket_list_places_to_visit.unshift(newBucketListPlaceToVisit);
+
+        profile.save()
+          .then(profile => res.json(profile));
+      })
   }
 );
 
