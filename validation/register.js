@@ -37,7 +37,7 @@ module.exports = function vaildateRegisterInput(data) {
     errors.confirmPassword = 'Password confirmation failed';
   }
 
-  if (Validator.equals(data.password, data.confirmPassword)) {
+  if (!Validator.equals(data.password, data.confirmPassword)) {
     errors.confirmPassword = 'Passwords must match';
   }
 

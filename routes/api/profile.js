@@ -214,4 +214,64 @@ router.post(
   }
 );
 
+// @route   DELTE api/profile/bucket_list_activities/:bl_activities_id
+// @desc    Delete bucket list activities from profile
+// @access  Private
+router.delete(
+  '/bucket_list_activities/:bl_activities_id', 
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        const removeIndex = profile.bucket_list_activities
+          .map(item => item.id)
+          .indexOf(req.params.bl_activities_id);
+        
+          profile.bucket_list_activities.splice(removeIndex, 1);
+
+          profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   DELTE api/profile/bucket_list_places_to_visit/:bl_places_id
+// @desc    Delete bucket list places to visit from profile
+// @access  Private
+router.delete(
+  '/bucket_list_places_to_visit/:bl_places_id', 
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        const removeIndex = profile.bucket_list_places_to_visit
+          .map(item => item.id)
+          .indexOf(req.params.bl_places_id);
+        
+          profile.bucket_list_places_to_visit.splice(removeIndex, 1);
+
+          profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   DELTE api/profile
+// @desc    Delete user and profile
+// @access  Private
+router.delete(
+  '/', 
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id })
+      .then(() => {
+        User.findOneAndRemove({ _id: req.user.id })
+          .then(() => { 
+            res.json({ success: true })
+        })
+      })
+  }
+);
+
+
 module.exports = router;
