@@ -35,11 +35,12 @@ module.exports = function vaildateRegisterInput(data) {
 
   if (Validator.isEmpty(data.confirmPassword)) {
     errors.confirmPassword = 'Password confirmation failed';
+  } else {
+    if (!Validator.equals(data.password, data.confirmPassword)) {
+      errors.confirmPassword = 'Passwords must match';
+    }
   }
 
-  if (!Validator.equals(data.password, data.confirmPassword)) {
-    errors.confirmPassword = 'Passwords must match';
-  }
 
   return {
     errors, 
