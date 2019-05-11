@@ -38,7 +38,7 @@ class Login extends Component {
 
     const loginUser = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     }
 
     this.props.loginUser(loginUser);
