@@ -13,7 +13,7 @@ class Landing extends Component {
                 Travelbook
                 </h1>
                 <p className="lead">
-                  Connect with other travelers and create a traveler portfolio.
+                  Create a travel portfolio and connect with others!
                   <br />
                   Post, like, and share your travel experiences! <span aria-label="airplane" role="img">✈️</span> 
                 </p>
