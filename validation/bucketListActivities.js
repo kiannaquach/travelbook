@@ -17,7 +17,7 @@ module.exports = function vaildateLoginInput(data) {
   }
 
   if (Validator.isEmpty(data.expected_month_visit)) {
-    errors.expected_month_visit = 'Expected month visit is required';
+    errors.expected_month_visit = 'Expected month is required';
   }
 
   return {
