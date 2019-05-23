@@ -40,6 +40,6 @@ export const loginUser = userData => dispatch => {
 export const setCurrentUser = decodedUser => {
   return {
     type: SET_CURRENT_USER,
-    payload: decodedUser
+    payload: decodedUser,
   }
 }
