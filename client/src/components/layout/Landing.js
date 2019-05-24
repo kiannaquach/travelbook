@@ -15,7 +15,7 @@ class Landing extends Component {
                 <p className="lead">
                   Create a travel portfolio and connect with others!
                   <br />
-                  Post, like, and share your travel experiences! <span aria-label="airplane" role="img">✈️🌍</span> 
+                  Post, like, and share your travel experiences to gain more insight! <span aria-label="airplane" role="img">✈️🌍</span> 
                 </p>
                 <hr />
                 <Link className="btn btn-lg btn-info mr-2" to='/register'>
