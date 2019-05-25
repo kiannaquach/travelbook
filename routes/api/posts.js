@@ -57,7 +57,7 @@ router.get(
 )
 
 // @route   DELETE api/posts/:id
-// @desc    Delete post
+// @desc    Delete post with corresponding id
 // @access  Private
 router.delete(
   '/:id', 
@@ -73,7 +73,7 @@ router.delete(
 
             post.remove().then(() => res.json({ success: true }))
           })
-          .catch(err => res.status(404).json({ postnotfound: 'No post found'}))
+          .catch(err => res.status(404).json({ postnotfound: 'No posts were found'}))
       })
   }
 )
