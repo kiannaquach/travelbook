@@ -13,7 +13,7 @@ module.exports = function vaildateLoginInput(data) {
   }
   
   if (Validator.isEmpty(data.place_to_visit_location)) {
-    errors.place_to_visit_location = 'Your bucket list place to visit location is required';
+    errors.place_to_visit_location = 'Please enter place to visit. It is required';
   }
 
   if (Validator.isEmpty(data.expected_month_visit)) {
